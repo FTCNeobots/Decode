@@ -255,7 +255,7 @@ public class DecodeBlue extends OpMode {
             }
         }
         if(spindexRunning){
-            spindex.setPower(0.5);
+            spindex.setPower(1);
             if(abs(spindex.getCurrentPosition() - spindex.getTargetPosition()) < 5){
                 spindexRunning = false;
 
