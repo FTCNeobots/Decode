@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import static java.lang.Math.abs;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -12,7 +14,10 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -31,7 +36,8 @@ public class DecodeBlue extends OpMode {
     private DcMotor flywheel;
     private Servo outtakeServo;
     private Servo heightServo;
-    private ColorSensor colorSensor;
+    private NormalizedColorSensor colorSensor;
+    private float gain = 20;
     private double maxSpeed = 1;
     private double botHeading;
     private double turnSpeed = 1;
@@ -82,7 +88,7 @@ public class DecodeBlue extends OpMode {
         servoClosed.setMode(DigitalChannel.Mode.INPUT);
 
         flywheel = hardwareMap.dcMotor.get("flywheel");
-        colorSensor = hardwareMap.get(ColorSensor.class, "sensor");
+        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor");
 
         //rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         //rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -113,7 +119,7 @@ public class DecodeBlue extends OpMode {
         outtakeServo.setPosition(servoIn);
         heightServo.setPosition(0.2);
 
-        colorSensor.enableLed(true);
+        colorSensor.setGain(gain);
 
         pinpoint.resetPosAndIMU();
     }
@@ -504,14 +510,10 @@ public class DecodeBlue extends OpMode {
 
     public boolean ColorSenseIsGreen(){
 
-        if(colorSensor.alpha() > 0){
-            if(colorSensor.red() < colorSensor.green()){
-                //it is green
-                return true;
-            }else{
-               //it is purple
-                return false;
-            }
+        NormalizedRGBA colors = colorSensor.getNormalizedColors();
+
+        if(colors.green > colors.blue){
+            return true;
         }else{
             return false;
         }
@@ -521,7 +523,7 @@ public class DecodeBlue extends OpMode {
 
     public boolean BallAccordingToColorSensor(){
 
-        if(colorSensor.red() > 3 || colorSensor.green() > 3){
+        if( ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) < 2.5){
             return true;
         }else{
             return false;

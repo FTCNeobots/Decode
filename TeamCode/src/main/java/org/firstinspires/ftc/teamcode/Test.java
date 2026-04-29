@@ -16,15 +16,14 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 @TeleOp(name = "Test")
 public class Test extends OpMode {
 
-    public NormalizedColorSensor sensor;
+    private NormalizedColorSensor sensor;
+    private float gain = 20;
 
     @Override
     public void init() {
 
         sensor = hardwareMap.get(NormalizedColorSensor.class, "sensor");
-
-
-
+        sensor.setGain(gain);
 
     }
 
