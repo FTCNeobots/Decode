@@ -5,6 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 
@@ -13,12 +16,12 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 @TeleOp(name = "Test")
 public class Test extends OpMode {
 
-    public ColorSensor sensor;
+    public NormalizedColorSensor sensor;
 
     @Override
     public void init() {
 
-        sensor = hardwareMap.get(ColorSensor.class, "sensor");
+        sensor = hardwareMap.get(NormalizedColorSensor.class, "sensor");
 
 
 
@@ -28,17 +31,16 @@ public class Test extends OpMode {
     @Override
     public void loop() {
 
-        sensor.enableLed(true); //is toch mooi?
+        telemetry.addData("Light Detected", ((OpticalDistanceSensor) sensor).getLightDetected());
+        NormalizedRGBA colors = sensor.getNormalizedColors();
 
-        telemetry.addData("Red: ", sensor.red());
-        telemetry.addData("Green: ", sensor.green());
-        telemetry.addData("Blue: ", sensor.blue());
-        telemetry.addData("ARGB: ", sensor.argb());
-        telemetry.addData("Alpha: ", sensor.alpha());
-
-
-
+        //Determining the amount of red, green, and blue
+        telemetry.addData("Red", "%.3f", colors.red);
+        telemetry.addData("Green", "%.3f", colors.green);
+        telemetry.addData("Blue", "%.3f", colors.blue);
         telemetry.update();
+
+
 
 
     }

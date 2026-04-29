@@ -36,7 +36,7 @@ public class DecodeBlue extends OpMode {
     private double botHeading;
     private double turnSpeed = 1;
     private int position = 1;
-    private int ticksBetween = 443;
+    private int ticksBetween = 460;
     boolean spindexRunning = false;
     private int targetPosition = 1;
     private boolean ballAt1 = false;
@@ -46,8 +46,8 @@ public class DecodeBlue extends OpMode {
     private boolean is2Green = false;
     private boolean is3Green = false;
     public boolean ballAtCurrentValue = false;
-    public double servoOut = 0;
-    public double servoIn = 0.3;
+    public double servoOut = 0.4;
+    public double servoIn = 0.7;
     private DigitalChannel servoClosed;
     public boolean timerOn = false;
     public boolean flywheelOn = true;
@@ -56,7 +56,7 @@ public class DecodeBlue extends OpMode {
     private double yCorrection = 0;
     private boolean aimAssistInPosition = false;
     double time;
-    double flywheelSpeed = -0.95;
+    double flywheelSpeed = -1;
     double flywheelSpeedFar = -0.95;
     double flywheelSpeedClose = -0.85;
     int patternCode = 1;
@@ -129,7 +129,7 @@ public class DecodeBlue extends OpMode {
             imu.resetYaw();
         }
 
-        if(!((getRuntime() - time) < 1)){
+        if(!((getRuntime() - time) < 0.3)){
             if(timerOn){
                 outtakeServo.setPosition(servoIn);
                 ballAtCurrentValue = false;
