@@ -67,6 +67,7 @@ public class TestFlywheel extends OpMode {
 
         flywheel.setVelocity(currentTargetVelocity);
 
+
         double curVelocity = flywheel.getVelocity();
         double error = currentTargetVelocity - curVelocity;
 

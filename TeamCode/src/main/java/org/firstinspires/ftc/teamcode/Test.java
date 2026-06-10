@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 
 
-
+@Disabled
 @TeleOp(name = "Test")
 public class Test extends OpMode {
 
