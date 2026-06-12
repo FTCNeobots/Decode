@@ -58,7 +58,7 @@ public class TestSpindex extends OpMode {
     double RPMtoTPS = 28.0/60.0;
     double TPStoRPM = 60.0/28.0;
     double flywheelSpeedFar = 5600 * RPMtoTPS;
-    double flywheelSpeedClose = 5000 * RPMtoTPS;
+    double flywheelSpeedClose = 4800 * RPMtoTPS;
     double flywheelSpeed = flywheelSpeedFar;
 
     @Override

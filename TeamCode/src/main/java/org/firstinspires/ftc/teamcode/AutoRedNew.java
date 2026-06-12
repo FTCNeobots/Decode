@@ -13,7 +13,6 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -23,9 +22,9 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.List;
 
-@Disabled
-@Autonomous(name = "AutoRed")
-public class AutoRed extends OpMode {
+
+@Autonomous(name = "AutoRedNew")
+public class AutoRedNew extends OpMode {
 
     private DcMotor intake;
     private DcMotor spindex;
@@ -36,7 +35,7 @@ public class AutoRed extends OpMode {
     public double servoOut = 0;
     public double servoIn = 0.3;
     private int ticksBetween = 442;
-    private double sleepTime = 400;
+    private double sleepTime = 250;
     private double flywheelPower = 0.95;
     private Limelight3A limelight3A;
     private Follower follower;
@@ -322,7 +321,7 @@ public class AutoRed extends OpMode {
         outtakeServo.setPosition(servoOut);
         Sleeping(sleepTime);
         outtakeServo.setPosition(servoIn);
-        Sleeping(sleepTime-50);
+        Sleeping(sleepTime);
         spindex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spindex.setTargetPosition(-ticksBetween);
         spindex.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -333,7 +332,7 @@ public class AutoRed extends OpMode {
         outtakeServo.setPosition(servoOut);
         Sleeping(sleepTime);
         outtakeServo.setPosition(servoIn);
-        Sleeping(sleepTime-50);
+        Sleeping(sleepTime);
 
         spindex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spindex.setTargetPosition(-ticksBetween);
@@ -346,7 +345,7 @@ public class AutoRed extends OpMode {
         Sleeping(sleepTime);
         outtakeServo.setPosition(servoIn);
 
-        Sleeping(300);
+        Sleeping(sleepTime);
     }
 
 
