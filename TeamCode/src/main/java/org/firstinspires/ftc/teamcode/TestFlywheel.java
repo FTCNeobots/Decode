@@ -12,8 +12,10 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 public class TestFlywheel extends OpMode {
 
     DcMotorEx flywheel;
-    double highVelocity = 5500;
-    double lowVelocity = 4500;
+    double RPMtoTPS = 28.0/60.0;
+    double TPStoRPM = 60.0/28.0;
+    double highVelocity = 5500 * RPMtoTPS;
+    double lowVelocity = 4000 * RPMtoTPS;
     double currentTargetVelocity = highVelocity;
     double P = 0;
     double F = 0;
@@ -67,15 +69,17 @@ public class TestFlywheel extends OpMode {
 
         flywheel.setVelocity(currentTargetVelocity);
 
+        //p = 30, f = 11
+
 
         double curVelocity = flywheel.getVelocity();
         double error = currentTargetVelocity - curVelocity;
 
         telemetry.addData("P: ", P);
         telemetry.addData("F: ", F);
-        telemetry.addData("Current velocity: ", curVelocity);
-        telemetry.addData("Current target velocity: ", currentTargetVelocity);
-        telemetry.addData("Error: ", error);
+        telemetry.addData("Current velocity: ", curVelocity * TPStoRPM);
+        telemetry.addData("Current target velocity: ", currentTargetVelocity * TPStoRPM);
+        telemetry.addData("Error: ", error * TPStoRPM);
         telemetry.addData("Stepsize: ", stepValues[stepIndex]);
         telemetry.update();
 

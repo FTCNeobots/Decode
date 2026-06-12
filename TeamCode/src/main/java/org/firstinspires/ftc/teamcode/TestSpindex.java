@@ -7,12 +7,14 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -28,6 +30,7 @@ public class TestSpindex extends OpMode {
     private DcMotor rightFrontDrive;
     private DcMotor leftBackDrive;
     private DcMotor rightBackDrive;
+    private DcMotorEx flywheel;
     Servo outtakeServo;
     DigitalChannel sensor;
     DigitalChannel outtakeSwitch;
@@ -45,16 +48,18 @@ public class TestSpindex extends OpMode {
     double outtakePosIn = 0.7;
     double outtakePosOut = 0.4;
     boolean moveOuttake = false;
-    double timeItTakesToOutput = 0.8;
+    double timeItTakesToOutput = 0.3;
     int outtakeState = 0;
     boolean readyForNextOuttake = true;
     private Limelight3A limelight3A;
     private double xCorrection = 0;
     private double yCorrection = 0;
     private boolean aimAssistInPosition = false;
-    double flywheelSpeed = -1;
-    double flywheelSpeedFar = -0.95;
-    double flywheelSpeedClose = -0.85;
+    double RPMtoTPS = 28.0/60.0;
+    double TPStoRPM = 60.0/28.0;
+    double flywheelSpeedFar = 5600 * RPMtoTPS;
+    double flywheelSpeedClose = 5000 * RPMtoTPS;
+    double flywheelSpeed = flywheelSpeedFar;
 
     @Override
     public void init() {
@@ -68,12 +73,20 @@ public class TestSpindex extends OpMode {
         leftBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        flywheel = hardwareMap.get(DcMotorEx.class, "flywheel");
+        flywheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        PIDFCoefficients pidfFlywheel = new PIDFCoefficients(30, 0.1, 0, 11);
+        flywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfFlywheel);
+
         imu = hardwareMap.get(IMU.class, "imu");
         // Adjust the orientation parameters to match your robot
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
         imu.initialize(parameters);
+
+
 
         limelight3A = hardwareMap.get(Limelight3A.class, "limelight");
         limelight3A.pipelineSwitch(3); //April Tags blue
@@ -105,6 +118,7 @@ public class TestSpindex extends OpMode {
         limelight3A.start();
         outtakeServo.setPosition(outtakePosIn);
         colorSensor.setGain(20);
+        flywheel.setVelocity(flywheelSpeed);
 
         pinpoint.resetPosAndIMU();
 
@@ -131,6 +145,7 @@ public class TestSpindex extends OpMode {
         Intaking();
         TurnSpindex();
         Outtake();
+        FlywheelControl();
 
 
         telemetry.addData("Ball count: ", Spindexer.GetBallCount());
@@ -138,6 +153,7 @@ public class TestSpindex extends OpMode {
         telemetry.addData("Is there a ball ", BallAccordingToColorSensor());
         telemetry.addData("Outtake switch position ", outtakeSwitch.getState());
         telemetry.addData("Outtake state ", outtakeState);
+        telemetry.addData("Current RPM: ", flywheel.getVelocity() * TPStoRPM);
         telemetry.addLine(Spindexer.printState());
 
         telemetry.update();
@@ -204,15 +220,16 @@ public class TestSpindex extends OpMode {
      * does the logic which starts and stops the spindexer, to make it turn properly
      */
     void TurnSpindex(){
-        if(deltaSlots <= 0 || !outtakeSwitch.getState() || outtakeState != 0){
+        if(RisingEdgeSwitch()){
+            deltaSlots -= 1;
+        }
+
+        if(deltaSlots <= 0 || !outtakeSwitch.getState() || outtakeState != 0 || gamepad1.y){
             spindex.setPower(0);
         }else {
             spindex.setPower(spindexSpeed);
         }
 
-        if(RisingEdgeSwitch()){
-            deltaSlots -= 1;
-        }
     }
 
     void Outtake(){
@@ -357,6 +374,19 @@ public class TestSpindex extends OpMode {
         rightBackDrive.setPower(_RBSpeed);
         rightFrontDrive.setPower(_RFSpeed);
 
+    }
+    void FlywheelControl(){
+        if(gamepad1.dpad_left){
+            flywheelSpeed = flywheelSpeedClose;
+        }
+        if(gamepad1.dpad_right){
+            flywheelSpeed = flywheelSpeedFar;
+        }
+        if(gamepad1.dpad_down){
+            flywheelSpeed = 0;
+        }
+
+        flywheel.setVelocity(flywheelSpeed);
     }
 
 

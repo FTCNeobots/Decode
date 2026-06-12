@@ -13,7 +13,6 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -24,20 +23,18 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import java.util.List;
 
 
-@Disabled
-@Autonomous(name = "AutoBlue")
-public class AutoBlue extends OpMode {
+@Autonomous(name = "AutoBlueNew")
+public class AutoBlueNew extends OpMode {
 
     private DcMotor intake;
     private DcMotor spindex;
     private DcMotor flywheel;
     private Servo outtakeServo;
-    private Servo heightServo;
     private DigitalChannel servoClosed;
-    public double servoOut = 0;
-    public double servoIn = 0.3;
+    public double servoOut = 0.4;
+    public double servoIn = 0.7;
     private int ticksBetween = 442;
-    private double sleepTime = 400;
+    private double sleepTime = 250;
     private double flywheelPower = 0.95;
     int patternIndex = 21;
     private Limelight3A limelight3A;
@@ -65,7 +62,6 @@ public class AutoBlue extends OpMode {
         spindex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         outtakeServo = hardwareMap.get(Servo.class, "outtake");
-        heightServo = hardwareMap.get(Servo.class, "height");
 
         servoClosed = hardwareMap.get(DigitalChannel.class, "switch");
         servoClosed.setMode(DigitalChannel.Mode.INPUT);
@@ -88,9 +84,7 @@ public class AutoBlue extends OpMode {
     @Override
     public void start() {
         opmodeTimer.resetTimer();
-        heightServo.setPosition(0.2);
         outtakeServo.setPosition(servoIn);
-
         setPathState(0);
         flywheel.setPower(-flywheelPower);
 
@@ -312,7 +306,7 @@ public class AutoBlue extends OpMode {
     }
     public void RunSpindexReverse(){
         spindex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        spindex.setTargetPosition(ticksBetween);
+        spindex.setTargetPosition(2*-ticksBetween);
         spindex.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         spindex.setPower(0.5);
     }
@@ -321,7 +315,7 @@ public class AutoBlue extends OpMode {
         outtakeServo.setPosition(servoOut);
         Sleeping(sleepTime);
         outtakeServo.setPosition(servoIn);
-        Sleeping(sleepTime-50);
+        Sleeping(sleepTime);
         spindex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spindex.setTargetPosition(-ticksBetween);
         spindex.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -332,7 +326,7 @@ public class AutoBlue extends OpMode {
         outtakeServo.setPosition(servoOut);
         Sleeping(sleepTime);
         outtakeServo.setPosition(servoIn);
-        Sleeping(sleepTime-50);
+        Sleeping(sleepTime);
 
         spindex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spindex.setTargetPosition(-ticksBetween);
@@ -345,7 +339,7 @@ public class AutoBlue extends OpMode {
         Sleeping(sleepTime);
         outtakeServo.setPosition(servoIn);
 
-        Sleeping(300);
+        Sleeping(sleepTime);
     }
 
 
