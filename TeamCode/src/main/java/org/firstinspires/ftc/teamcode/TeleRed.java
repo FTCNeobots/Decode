@@ -17,12 +17,11 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "TestSpindex")
-public class TestSpindex extends OpMode {
+@TeleOp(name = "TeleRed")
+public class TeleRed extends OpMode {
 
     DcMotor spindex;
     DcMotor intake;
@@ -58,7 +57,7 @@ public class TestSpindex extends OpMode {
     double RPMtoTPS = 28.0/60.0;
     double TPStoRPM = 60.0/28.0;
     double flywheelSpeedFar = 5600 * RPMtoTPS;
-    double flywheelSpeedClose = 4800 * RPMtoTPS;
+    double flywheelSpeedClose = 4500 * RPMtoTPS;
     double flywheelSpeed = flywheelSpeedFar;
 
     @Override
@@ -89,7 +88,7 @@ public class TestSpindex extends OpMode {
 
 
         limelight3A = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight3A.pipelineSwitch(3); //April Tags blue
+        limelight3A.pipelineSwitch(4); //April Tags red
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
         pinpoint.setOffsets(-3.42, -6.77, DistanceUnit.INCH);
@@ -308,7 +307,7 @@ public class TestSpindex extends OpMode {
 
     private void AimAssist(){
         double pX = 0.015;
-        double targetYaw = -135 * 3.141592654 / 180;
+        double targetYaw = -45 * 3.141592654 / 180;
         double targetX;
         double targetA;
         double feedforward = 0.05;

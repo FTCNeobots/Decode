@@ -33,8 +33,8 @@ public class AutoBlueNew extends OpMode {
     private DigitalChannel servoClosed;
     public double servoOut = 0.4;
     public double servoIn = 0.7;
-    private int ticksBetween = 442;
-    private double sleepTime = 250;
+    private int ticksBetween = 440;
+    private double sleepTime = 300;
     private double flywheelPower = 0.95;
     int patternIndex = 21;
     private Limelight3A limelight3A;
@@ -44,14 +44,14 @@ public class AutoBlueNew extends OpMode {
 
     private final Pose startPose = new Pose(48, 9, Math.toRadians(0));
     private final Pose scorePose = new Pose(55, 15, Math.toRadians(20));
-    private final Pose angle1Pose = new Pose(50, 33, Math.toRadians(180));
-    private final Pose pickup1Pose = new Pose(37, 33, Math.toRadians(180)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose pickup2Pose = new Pose(32, 33, Math.toRadians(180));
-    private final Pose pickup3Pose = new Pose(15, 33, Math.toRadians(180));
-    private final Pose _angle1Pose = new Pose(50, 57, Math.toRadians(180));
-    private final Pose _pickup1Pose = new Pose(37, 57, Math.toRadians(180)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose _pickup2Pose = new Pose(32, 57, Math.toRadians(180));
-    private final Pose _pickup3Pose = new Pose(15, 57, Math.toRadians(180));
+    private final Pose angle1Pose = new Pose(50, 35, Math.toRadians(180));
+    private final Pose pickup1Pose = new Pose(37, 35, Math.toRadians(180)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose pickup2Pose = new Pose(32, 35, Math.toRadians(180));
+    private final Pose pickup3Pose = new Pose(15, 35, Math.toRadians(180));
+    private final Pose _angle1Pose = new Pose(50, 59, Math.toRadians(180));
+    private final Pose _pickup1Pose = new Pose(37, 59, Math.toRadians(180)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose _pickup2Pose = new Pose(32, 59, Math.toRadians(180));
+    private final Pose _pickup3Pose = new Pose(15, 59, Math.toRadians(180));
     private final Pose finalPose = new Pose(40, 26, Math.toRadians(180));
 
     @Override

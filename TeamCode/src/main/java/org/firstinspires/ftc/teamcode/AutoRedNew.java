@@ -30,12 +30,11 @@ public class AutoRedNew extends OpMode {
     private DcMotor spindex;
     private DcMotor flywheel;
     private Servo outtakeServo;
-    private Servo heightServo;
     private DigitalChannel servoClosed;
-    public double servoOut = 0;
-    public double servoIn = 0.3;
-    private int ticksBetween = 442;
-    private double sleepTime = 250;
+    public double servoOut = 0.4;
+    public double servoIn = 0.7;
+    private int ticksBetween = 440;
+    private double sleepTime = 300;
     private double flywheelPower = 0.95;
     private Limelight3A limelight3A;
     private Follower follower;
@@ -45,14 +44,14 @@ public class AutoRedNew extends OpMode {
 
     private final Pose startPose = new Pose(96, 9, Math.toRadians(0));
     private final Pose scorePose = new Pose(89, 15, Math.toRadians(-26));
-    private final Pose angle1Pose = new Pose(94, 33, Math.toRadians(0));
-    private final Pose pickup1Pose = new Pose(107, 33, Math.toRadians(0)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose pickup2Pose = new Pose(112, 33, Math.toRadians(0));
-    private final Pose pickup3Pose = new Pose(129, 33, Math.toRadians(0));
-    private final Pose _angle1Pose = new Pose(94, 57, Math.toRadians(0));
-    private final Pose _pickup1Pose = new Pose(107, 57, Math.toRadians(0)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose _pickup2Pose = new Pose(112, 57, Math.toRadians(0));
-    private final Pose _pickup3Pose = new Pose(129, 57, Math.toRadians(0));
+    private final Pose angle1Pose = new Pose(94, 35, Math.toRadians(0));
+    private final Pose pickup1Pose = new Pose(107, 35, Math.toRadians(0)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose pickup2Pose = new Pose(112, 35, Math.toRadians(0));
+    private final Pose pickup3Pose = new Pose(129, 35, Math.toRadians(0));
+    private final Pose _angle1Pose = new Pose(94, 59, Math.toRadians(0));
+    private final Pose _pickup1Pose = new Pose(107, 59, Math.toRadians(0)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose _pickup2Pose = new Pose(112, 59, Math.toRadians(0));
+    private final Pose _pickup3Pose = new Pose(129, 59, Math.toRadians(0));
     private final Pose finalPose = new Pose(104, 26, Math.toRadians(0));
 
     @Override
@@ -63,7 +62,6 @@ public class AutoRedNew extends OpMode {
         spindex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         outtakeServo = hardwareMap.get(Servo.class, "outtake");
-        heightServo = hardwareMap.get(Servo.class, "height");
 
         servoClosed = hardwareMap.get(DigitalChannel.class, "switch");
         servoClosed.setMode(DigitalChannel.Mode.INPUT);
@@ -87,7 +85,6 @@ public class AutoRedNew extends OpMode {
     public void start() {
         opmodeTimer.resetTimer();
         outtakeServo.setPosition(servoIn);
-        heightServo.setPosition(0.2);
 
         setPathState(0);
         flywheel.setPower(-flywheelPower);
