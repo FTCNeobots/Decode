@@ -56,7 +56,7 @@ public class TeleRed extends OpMode {
     private boolean aimAssistInPosition = false;
     double RPMtoTPS = 28.0/60.0;
     double TPStoRPM = 60.0/28.0;
-    double flywheelSpeedFar = 5600 * RPMtoTPS;
+    double flywheelSpeedFar = 5500 * RPMtoTPS;
     double flywheelSpeedClose = 4500 * RPMtoTPS;
     double flywheelSpeed = flywheelSpeedFar;
 
@@ -181,7 +181,9 @@ public class TeleRed extends OpMode {
             if(BallAccordingToColorSensor() && deltaSlots <= 0){
                 deltaSlots = Spindexer.Intaking(ColorSenseIsGreen());
             }
-        }else{
+        }else if(gamepad1.right_bumper){
+            intake.setPower(-1);
+        } else{
             intake.setPower(0);
         }
 
@@ -308,7 +310,8 @@ public class TeleRed extends OpMode {
     private void AimAssist(){
         double pX = 0.015;
         double targetYaw = -45 * 3.141592654 / 180;
-        double targetX;
+        //positive is a move to the right
+        double targetX = -4;
         double targetA;
         double feedforward = 0.05;
         double deadZone = 2;
@@ -321,12 +324,10 @@ public class TeleRed extends OpMode {
         LLResult llResult = limelight3A.getLatestResult();
         if(llResult != null && llResult.isValid()){
             if(llResult.getTa() < 0.5){
-                targetX = 0;
                 targetA = 0.34;
                 flywheelSpeed = flywheelSpeedFar;
 
             }else{
-                targetX = 0;
                 targetA = 0;
                 flywheelSpeed = flywheelSpeedClose;
             }
